@@ -23,7 +23,7 @@ namespace Orleans
         /// <summary>
         /// Remaining number of connected gateways.
         /// </summary>
-        public int RemainingNumberOfGateways { get; }
+        public int RemainingGatewaysCount { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GatewayConnectionClosedEventArgs"/> class.
@@ -31,13 +31,13 @@ namespace Orleans
         /// <param name="remoteGatewayAddresss">
         /// SiloAddress of the remote silo gateway that closed.
         /// </param>
-        /// <param name="remainingNumberOfGateways">
+        /// <param name="remainingGatewaysCount">
         /// Remaining number of connected gateways
         /// </param>        
-        public GatewayConnectionClosedEventArgs(SiloAddress remoteGatewayAddresss, int remainingNumberOfGateways)
+        public GatewayConnectionClosedEventArgs(SiloAddress remoteGatewayAddresss, int remainingGatewaysCount)
         {
             this.RemoteGatewayAddresss = remoteGatewayAddresss;
-            this.RemainingNumberOfGateways = remainingNumberOfGateways;
+            this.RemainingGatewaysCount = remainingGatewaysCount;
         }
     }
 }
