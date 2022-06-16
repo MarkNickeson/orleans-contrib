@@ -15,6 +15,7 @@ namespace Orleans.CodeGenerator
             var configParam = "config".ToIdentifierName();
             var addSerializerMethod = configParam.Member("Serializers").Member("Add");
             var addCopierMethod = configParam.Member("Copiers").Member("Add");
+            var addConverterMethod = configParam.Member("Converters").Member("Add");
             var body = new List<StatementSyntax>();
             body.AddRange(
                 metadataModel.SerializableTypes.Select(
@@ -56,6 +57,15 @@ namespace Orleans.CodeGenerator
                                     SingletonSeparatedList(
                                         Argument(TypeOfExpression(type.ToOpenTypeSyntax()))))))
                 ));
+            body.AddRange(
+                metadataModel.DetectedConverters.Select(
+                    type =>
+                        (StatementSyntax)ExpressionStatement(
+                            InvocationExpression(
+                                addConverterMethod,
+                                ArgumentList(
+                                    SingletonSeparatedList(
+                                        Argument(TypeOfExpression(type.ToOpenTypeSyntax()))))))));
             var addProxyMethod = configParam.Member("InterfaceProxies").Member("Add");
             body.AddRange(
                 metadataModel.GeneratedProxies.Select(
@@ -150,7 +160,7 @@ namespace Orleans.CodeGenerator
                 .AddBodyStatements(body.ToArray());
 
             var interfaceType = libraryTypes.ITypeManifestProvider;
-            return ClassDeclaration("Metadata_" + compilation.AssemblyName.Replace('.', '_'))
+            return ClassDeclaration("Metadata_" + SyntaxGeneration.Identifier.SanitizeIdentifierName(compilation.AssemblyName))
                 .AddBaseListTypes(SimpleBaseType(interfaceType.ToTypeSyntax()))
                 .AddModifiers(Token(SyntaxKind.InternalKeyword), Token(SyntaxKind.SealedKeyword))
                 .AddAttributeLists(AttributeList(SingletonSeparatedList(CodeGenerator.GetGeneratedCodeAttributeSyntax())))

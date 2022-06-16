@@ -26,6 +26,7 @@ namespace Orleans.CodeGenerator
                 FieldCodec_1 = Type("Orleans.Serialization.Codecs.IFieldCodec`1"),
                 DeepCopier_1 = Type("Orleans.Serialization.Cloning.IDeepCopier`1"),
                 CopyContext = Type("Orleans.Serialization.Cloning.CopyContext"),
+                CopyContextPool = Type("Orleans.Serialization.Cloning.CopyContextPool"),
                 MethodInfo = Type("System.Reflection.MethodInfo"),
                 Func_2 = Type("System.Func`2"),
                 GenerateMethodSerializersAttribute = Type("Orleans.GenerateMethodSerializersAttribute"),
@@ -47,6 +48,7 @@ namespace Orleans.CodeGenerator
                 RegisterSerializerAttribute = Type("Orleans.RegisterSerializerAttribute"),
                 GeneratedActivatorConstructorAttribute = Type("Orleans.GeneratedActivatorConstructorAttribute"),
                 RegisterActivatorAttribute = Type("Orleans.RegisterActivatorAttribute"),
+                RegisterConverterAttribute = Type("Orleans.RegisterConverterAttribute"),
                 RegisterCopierAttribute = Type("Orleans.RegisterCopierAttribute"),
                 UseActivatorAttribute = Type("Orleans.UseActivatorAttribute"),
                 SuppressReferenceTrackingAttribute = Type("Orleans.SuppressReferenceTrackingAttribute"),
@@ -263,11 +265,13 @@ namespace Orleans.CodeGenerator
         public List<WellKnownCopierDescription> WellKnownCopiers { get; private set; }
         public INamedTypeSymbol RegisterCopierAttribute { get; private set; }
         public INamedTypeSymbol RegisterSerializerAttribute { get; private set; }
+        public INamedTypeSymbol RegisterConverterAttribute { get; private set; }
         public INamedTypeSymbol RegisterActivatorAttribute { get; private set; }
         public INamedTypeSymbol UseActivatorAttribute { get; private set; }
         public INamedTypeSymbol SuppressReferenceTrackingAttribute { get; private set; }
         public INamedTypeSymbol OmitDefaultMemberValuesAttribute { get; private set; }
         public INamedTypeSymbol CopyContext { get; private set; }
+        public INamedTypeSymbol CopyContextPool { get; private set; }
         public Compilation Compilation { get; private set; }
         public List<ITypeSymbol> ImmutableTypes { get; private set; }
         public INamedTypeSymbol TimeSpan { get; private set; }

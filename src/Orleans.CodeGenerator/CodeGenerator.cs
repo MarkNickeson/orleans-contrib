@@ -94,7 +94,7 @@ namespace Orleans.CodeGenerator
             }
 
             // Generate metadata.
-            var metadataClassNamespace = CodeGeneratorName + "." + _compilation.AssemblyName;
+            var metadataClassNamespace = CodeGeneratorName + "." + SyntaxGeneration.Identifier.SanitizeIdentifierName(_compilation.AssemblyName);
             var metadataClass = MetadataGenerator.GenerateMetadata(_compilation, metadataModel, LibraryTypes);
             AddMember(ns: metadataClassNamespace, member: metadataClass);
             var metadataAttribute = AttributeList()
@@ -256,6 +256,11 @@ namespace Orleans.CodeGenerator
                         if (symbol.HasAttribute(LibraryTypes.RegisterCopierAttribute))
                         {
                             metadataModel.DetectedCopiers.Add(symbol);
+                        }
+
+                        if (symbol.HasAttribute(LibraryTypes.RegisterConverterAttribute))
+                        {
+                            metadataModel.DetectedConverters.Add(symbol);
                         }
 
                         // Find all implementations of invokable interfaces
