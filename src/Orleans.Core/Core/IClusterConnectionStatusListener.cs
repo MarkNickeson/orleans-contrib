@@ -26,6 +26,6 @@ namespace Orleans
         /// <summary>
         /// Notifies this client that the connection to the specified gateway has been lost.
         /// </summary>
-        void NotifyGatewayConnectionClosed(SiloAddress remoteSiloGatewayAddress);
+        void NotifyGatewayConnectionClosed(SiloAddress remoteSiloGatewayAddress, int currentNumberOfGateways);
     }
 }

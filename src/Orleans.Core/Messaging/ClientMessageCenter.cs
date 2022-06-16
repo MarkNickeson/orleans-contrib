@@ -426,10 +426,9 @@ namespace Orleans.Messaging
         }
 
         internal void OnGatewayConnectionClosed(SiloAddress remoteGatewaySiloAddress)
-        {
-            this.connectionStatusListener.NotifyGatewayConnectionClosed(remoteGatewaySiloAddress);
-
+        {            
             var gatewayCount = Interlocked.Decrement(ref numberOfConnectedGateways);
+            this.connectionStatusListener.NotifyGatewayConnectionClosed(remoteGatewaySiloAddress, gatewayCount);
             if (gatewayCount == 0)
             {
                 this.connectionStatusListener.NotifyClusterConnectionLost();

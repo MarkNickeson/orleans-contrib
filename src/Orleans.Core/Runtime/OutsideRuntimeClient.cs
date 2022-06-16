@@ -513,13 +513,13 @@ namespace Orleans
         }
 
         /// <inheritdoc />
-        public void NotifyGatewayConnectionClosed(SiloAddress remoteSiloGatewayAddress)
+        public void NotifyGatewayConnectionClosed(SiloAddress remoteSiloGatewayAddress, int remainingNumberOfGateways)
         {
             if (this.GatewayConnectionClosed != null)
             {
                 try
                 {
-                    this.GatewayConnectionClosed(this, new GatewayConnectionClosedEventArgs(remoteSiloGatewayAddress));
+                    this.GatewayConnectionClosed(this, new GatewayConnectionClosedEventArgs(remoteSiloGatewayAddress, remainingNumberOfGateways));
                 }
                 catch (Exception ex)
                 {
