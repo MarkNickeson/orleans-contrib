@@ -1,3 +1,5 @@
+using Orleans.Runtime;
+
 namespace Orleans
 {
     /// <summary>
@@ -20,5 +22,10 @@ namespace Orleans
         /// Notifies this client that the connection to the cluster has been lost.
         /// </summary>
         void NotifyClusterConnectionLost();
+
+        /// <summary>
+        /// Notifies this client that the connection to the specified gateway has been lost.
+        /// </summary>
+        void NotifyGatewayConnectionClosed(SiloAddress remoteSiloGatewayAddress);
     }
 }

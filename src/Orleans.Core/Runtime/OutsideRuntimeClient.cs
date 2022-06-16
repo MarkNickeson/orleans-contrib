@@ -484,6 +484,9 @@ namespace Orleans
         public event GatewayCountChangedHandler GatewayCountChanged;
 
         /// <inheritdoc />
+        public event GatewayConnectionClosedHandler GatewayConnectionClosed;
+
+        /// <inheritdoc />
         public void NotifyClusterConnectionLost()
         {
             try
@@ -506,6 +509,22 @@ namespace Orleans
             catch (Exception ex)
             {
                 this.logger.Error(ErrorCode.ClientError, "Error when sending gateway count changed notification", ex);
+            }
+        }
+
+        /// <inheritdoc />
+        public void NotifyGatewayConnectionClosed(SiloAddress remoteSiloGatewayAddress)
+        {
+            if (this.GatewayConnectionClosed != null)
+            {
+                try
+                {
+                    this.GatewayConnectionClosed(this, new GatewayConnectionClosedEventArgs(remoteSiloGatewayAddress));
+                }
+                catch (Exception ex)
+                {
+                    this.logger.Error(ErrorCode.ClientError, "Error when sending gateway connection closed notification", ex);
+                }
             }
         }
 

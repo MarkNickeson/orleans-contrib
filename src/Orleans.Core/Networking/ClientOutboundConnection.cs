@@ -88,7 +88,7 @@ namespace Orleans.Runtime.Messaging
             finally
             {
                 this.connectionManager.OnConnectionTerminated(this.RemoteSiloAddress, this, error);
-                this.messageCenter.OnGatewayConnectionClosed();
+                this.messageCenter.OnGatewayConnectionClosed(this.RemoteSiloAddress);
             }
         }
 

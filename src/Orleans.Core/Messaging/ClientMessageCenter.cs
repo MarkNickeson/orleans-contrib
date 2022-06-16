@@ -425,8 +425,10 @@ namespace Orleans.Messaging
             this.connectionStatusListener.NotifyGatewayCountChanged(newCount, newCount - 1);
         }
 
-        internal void OnGatewayConnectionClosed()
+        internal void OnGatewayConnectionClosed(SiloAddress remoteGatewaySiloAddress)
         {
+            this.connectionStatusListener.NotifyGatewayConnectionClosed(remoteGatewaySiloAddress);
+
             var gatewayCount = Interlocked.Decrement(ref numberOfConnectedGateways);
             if (gatewayCount == 0)
             {
