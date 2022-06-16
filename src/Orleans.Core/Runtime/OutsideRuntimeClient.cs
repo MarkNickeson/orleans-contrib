@@ -515,16 +515,13 @@ namespace Orleans
         /// <inheritdoc />
         public void NotifyGatewayConnectionClosed(SiloAddress remoteSiloGatewayAddress, int remainingNumberOfGateways)
         {
-            if (this.GatewayConnectionClosed != null)
+            try
             {
-                try
-                {
-                    this.GatewayConnectionClosed(this, new GatewayConnectionClosedEventArgs(remoteSiloGatewayAddress, remainingNumberOfGateways));
-                }
-                catch (Exception ex)
-                {
-                    this.logger.Error(ErrorCode.ClientError, "Error when sending gateway connection closed notification", ex);
-                }
+                this.GatewayConnectionClosed?.Invoke(this, new GatewayConnectionClosedEventArgs(remoteSiloGatewayAddress, remainingNumberOfGateways));
+            }
+            catch (Exception ex)
+            {
+                this.logger.Error(ErrorCode.ClientError, "Error when sending gateway connection closed notification", ex);
             }
         }
 
