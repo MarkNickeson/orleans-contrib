@@ -91,5 +91,43 @@ namespace Tester
 
             Assert.True(reconnected, "Failed to reconnect to restarted gateway.");
         }
+
+        [Fact, TestCategory("SlowBVT")]
+        public async Task EventSentWhenGatewayConnectionClosed()
+        {
+            var runtime = this.HostedCluster.ServiceProvider.GetRequiredService<OutsideRuntimeClient>();
+
+            GatewayConnectionClosedEventArgs capturedArgs = null;
+            var semaphore = new SemaphoreSlim(0,1);
+            
+            this.runtimeClient.GatewayConnectionClosed += (sender, args) =>
+            {
+                capturedArgs = args;
+                semaphore.Release();
+            };
+
+            // Burst lot of call, to be sure that we are connected to all silos
+            for (int i = 0; i < 100; i++)
+            {
+                var grain = GrainFactory.GetGrain<ITestGrain>(i);
+                await grain.SetLabel(i.ToString());
+            }
+
+            // pick one random silo to stop
+            var rand = new Random();
+            var initialSiloCount = this.HostedCluster.Silos.Count;
+            var targetSiloIndex = rand.Next(initialSiloCount);
+            var targetSiloHandle = this.HostedCluster.Silos[targetSiloIndex];
+
+            // stop the target silo
+            await this.HostedCluster.StopSiloAsync(targetSiloHandle);
+
+            // expect semaphore to signal 
+            Assert.True(await semaphore.WaitAsync(TimeSpan.FromSeconds(10)));
+            // expect captured args SiloAddress to match target silo
+            Assert.Equal(targetSiloHandle.GatewayAddress, capturedArgs.RemoteGatewayAddresss);
+            // expect remaining gateway count to match this.HostedCluster.Silos.Count-1
+            Assert.Equal(initialSiloCount-1, capturedArgs.RemainingGatewaysCount);
+        }
     }
 }
